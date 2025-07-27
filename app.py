@@ -3,7 +3,7 @@ import pandas as pd
 
 st.set_page_config(page_title="Viabilidad Económica – Planes de Gobierno 2025", layout="wide")
 
-# ------------------ Datos ------------------
+# ------------------ Datos base ------------------
 cols = ["Candidato","Fiscal","Crec-Empleo","Institucionalidad","Productores","Justicia","Claridad","Total","Lectura rápida"]
 data = [
     ["Rodrigo Paz (PDC)",            4.5, 4.0, 4.5, 4.0, 3.5, 4.0, 24.5,
@@ -17,28 +17,35 @@ data = [
 ]
 df = pd.DataFrame(data, columns=cols)
 
-# ------------------ Conclusiones ------------------
+# ------------------ Conclusiones largas ------------------
 conclusiones = {
     "Rodrigo Paz (PDC)": (
-        "Combina regla fiscal estricta y redistribución 50/50 para corregir el centralismo. "
-        "Propone congelar EP deficitarias y digitalizar compras públicas (blockchain). "
-        "Eficiencia y transparencia mejoran riesgo país. El riesgo es político: sin pactos amplios la agenda se frena. "
-        "Si se aprueba, crecimiento y empleo formal se consolidan gradualmente con deuda sostenible."
+        "Su propuesta combina regla fiscal estricta (déficit cero) y redistribución 50/50 que corrige el centralismo "
+        "y puede mejorar la asignación del gasto. La secuencia de reformas (congelar EP deficitarias, nuevo orden "
+        "tributario, digitalizar compras con blockchain) apunta a eficiencia y transparencia, lo que reduce riesgo país "
+        "y puede “crowdear” inversión privada. El costo: alto capital político; sin pactos amplios, la reforma fiscal y "
+        "judicial puede trabarse o diluirse. Si logra aprobar el paquete, el impacto en crecimiento y empleo formal sería "
+        "gradual pero sostenido, con mejor sostenibilidad de deuda."
     ),
     "Manfred Reyes Villa (APB Súmate)": (
-        "Ajuste rápido: menos ministerios, fin de subsidios a combustibles y cierre/privatización de EP deficitarias. "
-        "Fiscalmente eficaz a corto plazo, pero puede desatar conflicto social si no hay compensaciones. "
-        "Faltan detalles de financiamiento y gestión del conflicto. Viable en números, frágil en gobernabilidad."
+        "Plantea un ajuste rápido y visible: menos ministerios, recortes a propaganda, eliminación de subsidios a combustibles "
+        "y cierre/privatización de EP deficitarias. Fiscalmente es eficaz a corto plazo, pero el shock puede contraer demanda si "
+        "no se acompaña de medidas compensatorias. El plan carece de un mapa claro de financiamiento y gestión del conflicto social "
+        "que inevitablemente generarán estas medidas. Si supera esa barrera, podría estabilizar cuentas; si no, corre riesgo de "
+        "ingobernabilidad y reversión de reformas."
     ),
     "Samuel Doria Medina (Alianza Unidad)": (
-        "“Rescate” macro en 100 días con dólares externos y cambio de expectativas; impulso al emprendimiento (1M) y transición energética. "
-        "Coherente, pero depende de financiamiento multilateral y ejecución fina. "
-        "Si la fase inicial falla, pierde credibilidad; si acierta, impulsa PIB y empleo."
+        "Propone un “rescate” macro en 100 días basado en dólares externos y cambio de expectativas, junto a una agenda pro‑emprendimiento "
+        "(1M emprendimientos) y transición energética. Económicamente es coherente: estabilizar primero, luego dinamizar. Pero depende de "
+        "financiamiento multilateral significativo, capacidad administrativa para ejecutar rápido y un plan operativo detallado para la meta "
+        "de emprendimientos. Si consigue los recursos y coordina bien, el efecto sobre PIB y empleo puede ser notable; si falla en la fase inicial, "
+        "pierde credibilidad y margen fiscal."
     ),
     "Carlos E. del Castillo (MAS‑IPSP)": (
-        "Continúa subsidios y programas sociales sin reformas estructurales. "
-        "Protege ingresos de corto plazo, pero presiona déficit y deuda en un contexto de RIN bajas. "
-        "Medidas productivas positivas pero poco cuantificadas. Sin reforma a subsidios y aparato estatal, la sostenibilidad depende de precios externos o más deuda."
+        "El enfoque es de continuidad social: mantener/expandir subsidios y programas con escaso ajuste estructural. Esto protege el ingreso de "
+        "corto plazo, pero tensiona la sostenibilidad fiscal en un contexto de RIN bajas y déficit persistente. Las medidas productivas (becas, MIPYMES) "
+        "son positivas pero poco cuantificadas; no compensan la carga de subsidios ni diversifican la matriz productiva rápidamente. En ausencia de una "
+        "reforma al régimen de subsidios y al aparato estatal, el modelo depende de un shock externo positivo (commodities) o mayor endeudamiento."
     ),
 }
 
@@ -55,10 +62,12 @@ with st.expander("Glosario"):
 st.subheader("Ranking (0–30 puntos)")
 st.dataframe(df.style.format({"Total": "{:.1f}"}), use_container_width=True)
 
-st.download_button("Descargar CSV",
-                   df.to_csv(index=False),
-                   "ranking_viabilidad.csv",
-                   "text/csv")
+st.download_button(
+    "Descargar CSV",
+    df.to_csv(index=False),
+    "ranking_viabilidad.csv",
+    "text/csv"
+)
 
 st.markdown("---")
 st.subheader("Detalle del análisis y conclusiones")
@@ -69,5 +78,7 @@ for cand in df["Candidato"]:
         st.markdown(f"**Lectura rápida:** {resumen}")
         st.markdown(f"**Conclusión (analista económico):** {conclusiones[cand]}")
 
-st.caption("Criterios (0–5): Sostenibilidad fiscal, Crecimiento & empleo, Institucionalidad/anticorrupción, "
-           "Clima para productores, Justicia/seguridad jurídica, Claridad & ejecutabilidad. Total máx. 30.")
+st.caption(
+    "Criterios (0–5): Sostenibilidad fiscal, Crecimiento & empleo, Institucionalidad/anticorrupción, "
+    "Clima para productores, Justicia/seguridad jurídica, Claridad & ejecutabilidad. Total máx. 30."
+)
