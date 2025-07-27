@@ -213,7 +213,7 @@ def estilo_resumen(df_in):
 # ------------------------------------------------------
 # 5. UI
 # ------------------------------------------------------
-st.title("¿Quién es más viable económicamente? (visión de economista)")
+st.title("¿Quién es más viable económicamente? (Viabilidad Económica – Planes de Gobierno 2025)")
 
 with st.expander("Glosario"):
     st.markdown("""
