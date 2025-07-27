@@ -17,28 +17,29 @@ data = [
 ]
 df = pd.DataFrame(data, columns=cols)
 
+# ------------------ Conclusiones ------------------
 conclusiones = {
     "Rodrigo Paz (PDC)": (
         "Combina regla fiscal estricta y redistribución 50/50 para corregir el centralismo. "
-        "Congela EP deficitarias y digitaliza compras públicas (blockchain), mejorando eficiencia y transparencia. "
-        "El riesgo central es político: sin pactos amplios, las reformas pueden frenarse. "
-        "Si se aprueban, el crecimiento y el empleo formal se consolidan gradualmente con deuda más sostenible."
+        "Propone congelar EP deficitarias y digitalizar compras públicas (blockchain). "
+        "Eficiencia y transparencia mejoran riesgo país. El riesgo es político: sin pactos amplios la agenda se frena. "
+        "Si se aprueba, crecimiento y empleo formal se consolidan gradualmente con deuda sostenible."
     ),
     "Manfred Reyes Villa (APB Súmate)": (
-        "Ajuste fiscal rápido: menos ministerios, fin de subsidios a combustibles y cierre/privatización de EP deficitarias. "
-        "Esto mejora el déficit en el corto plazo, pero puede generar conflicto social si no hay compensaciones. "
-        "Faltan detalles de financiamiento y de gestión del conflicto. Viable en números, frágil en gobernabilidad."
+        "Ajuste rápido: menos ministerios, fin de subsidios a combustibles y cierre/privatización de EP deficitarias. "
+        "Fiscalmente eficaz a corto plazo, pero puede desatar conflicto social si no hay compensaciones. "
+        "Faltan detalles de financiamiento y gestión del conflicto. Viable en números, frágil en gobernabilidad."
     ),
     "Samuel Doria Medina (Alianza Unidad)": (
-        "Propone un ‘rescate’ macro en 100 días con dólares externos y cambio de expectativas, junto con una gran apuesta al emprendimiento y la transición energética. "
-        "Es coherente, pero depende de financiamiento multilateral y de una ejecución muy fina. "
-        "Si la fase inicial falla, pierde credibilidad; si funciona, impulsa PIB y empleo de forma relevante."
+        "“Rescate” macro en 100 días con dólares externos y cambio de expectativas; impulso al emprendimiento (1M) y transición energética. "
+        "Coherente, pero depende de financiamiento multilateral y ejecución fina. "
+        "Si la fase inicial falla, pierde credibilidad; si acierta, impulsa PIB y empleo."
     ),
     "Carlos E. del Castillo (MAS‑IPSP)": (
-        "Mantiene subsidios y programas sociales sin reformas estructurales profundas. "
-        "Protege ingresos de corto plazo pero presiona déficit y deuda en un contexto de RIN bajas. "
-        "Las medidas productivas son positivas pero poco cuantificadas. Sin reformar subsidios y el aparato estatal, la sostenibilidad depende de mejores precios externos o más deuda."
-    )
+        "Continúa subsidios y programas sociales sin reformas estructurales. "
+        "Protege ingresos de corto plazo, pero presiona déficit y deuda en un contexto de RIN bajas. "
+        "Medidas productivas positivas pero poco cuantificadas. Sin reforma a subsidios y aparato estatal, la sostenibilidad depende de precios externos o más deuda."
+    ),
 }
 
 # ------------------ UI ------------------
@@ -54,22 +55,19 @@ with st.expander("Glosario"):
 st.subheader("Ranking (0–30 puntos)")
 st.dataframe(df.style.format({"Total": "{:.1f}"}), use_container_width=True)
 
-st.download_button(
-    "Descargar CSV",
-    df.to_csv(index=False),
-    "ranking_viabilidad.csv",
-    "text/csv"
-)
+st.download_button("Descargar CSV",
+                   df.to_csv(index=False),
+                   "ranking_viabilidad.csv",
+                   "text/csv")
 
 st.markdown("---")
 st.subheader("Detalle del análisis y conclusiones")
 
 for cand in df["Candidato"]:
     with st.expander(cand):
-        # texto corto de la tabla
-        resumen = df[df["Candidato"] == cand]["Lectura rápida"].iloc[0]
+        resumen = df.loc[df["Candidato"] == cand, "Lectura rápida"].iloc[0]
         st.markdown(f"**Lectura rápida:** {resumen}")
-        # conclusión elaborada
         st.markdown(f"**Conclusión (analista económico):** {conclusiones[cand]}")
 
-st.caption("Criterios (0–5): Sostenibilidad fiscal, Crecimiento & empleo, Institucionalidad/anticorrupción, Clima para productores, Justicia/seguridad jurídica, Claridad & ejecutabilidad. Total máx. 30.")
+st.caption("Criterios (0–5): Sostenibilidad fiscal, Crecimiento & empleo, Institucionalidad/anticorrupción, "
+           "Clima para productores, Justicia/seguridad jurídica, Claridad & ejecutabilidad. Total máx. 30.")
