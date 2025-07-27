@@ -3,9 +3,8 @@ import pandas as pd
 
 st.set_page_config(page_title="Viabilidad Económica – Planes de Gobierno 2025", layout="wide")
 
-st.title("¿Quién es más viable económicamente? (visión de economista)")
-
-# -------- Datos --------
+# ------------------ Datos ------------------
+cols = ["Candidato","Fiscal","Crec-Empleo","Institucionalidad","Productores","Justicia","Claridad","Total","Lectura rápida"]
 data = [
     ["Rodrigo Paz (PDC)",            4.5, 4.0, 4.5, 4.0, 3.5, 4.0, 24.5,
      "Plan 50/50: regla déficit cero, congelar EP deficitarias; reformas amplias pero requiere pactos."],
@@ -16,53 +15,61 @@ data = [
     ["Carlos E. del Castillo (MAS‑IPSP)", 2.0, 3.0, 2.0, 2.0, 2.5, 2.5, 14.0,
      "Continuismo social con pocos cambios estructurales; presión fiscal/subsidios sin fuente clara."]
 ]
-
-cols = ["Candidato","Fiscal","Crec-Empleo","Institucionalidad","Productores","Justicia","Claridad",
-        "Total","Lectura rápida"]
 df = pd.DataFrame(data, columns=cols)
 
-# -------- Tabla principal --------
+conclusiones = {
+    "Rodrigo Paz (PDC)": (
+        "Combina regla fiscal estricta y redistribución 50/50 para corregir el centralismo. "
+        "Congela EP deficitarias y digitaliza compras públicas (blockchain), mejorando eficiencia y transparencia. "
+        "El riesgo central es político: sin pactos amplios, las reformas pueden frenarse. "
+        "Si se aprueban, el crecimiento y el empleo formal se consolidan gradualmente con deuda más sostenible."
+    ),
+    "Manfred Reyes Villa (APB Súmate)": (
+        "Ajuste fiscal rápido: menos ministerios, fin de subsidios a combustibles y cierre/privatización de EP deficitarias. "
+        "Esto mejora el déficit en el corto plazo, pero puede generar conflicto social si no hay compensaciones. "
+        "Faltan detalles de financiamiento y de gestión del conflicto. Viable en números, frágil en gobernabilidad."
+    ),
+    "Samuel Doria Medina (Alianza Unidad)": (
+        "Propone un ‘rescate’ macro en 100 días con dólares externos y cambio de expectativas, junto con una gran apuesta al emprendimiento y la transición energética. "
+        "Es coherente, pero depende de financiamiento multilateral y de una ejecución muy fina. "
+        "Si la fase inicial falla, pierde credibilidad; si funciona, impulsa PIB y empleo de forma relevante."
+    ),
+    "Carlos E. del Castillo (MAS‑IPSP)": (
+        "Mantiene subsidios y programas sociales sin reformas estructurales profundas. "
+        "Protege ingresos de corto plazo pero presiona déficit y deuda en un contexto de RIN bajas. "
+        "Las medidas productivas son positivas pero poco cuantificadas. Sin reformar subsidios y el aparato estatal, la sostenibilidad depende de mejores precios externos o más deuda."
+    )
+}
+
+# ------------------ UI ------------------
+st.title("¿Quién es más viable económicamente? (visión de economista)")
+
+with st.expander("Glosario"):
+    st.markdown("""
+**EP:** Empresa Pública (empresa estatal).  
+**Déficit fiscal:** Cuando el Estado gasta más de lo que ingresa en un año.  
+**RIN:** Reservas Internacionales Netas (dólares del Banco Central).  
+""")
+
 st.subheader("Ranking (0–30 puntos)")
-st.dataframe(df.style.format({"Total":"{:.1f}"}), use_container_width=True)
+st.dataframe(df.style.format({"Total": "{:.1f}"}), use_container_width=True)
 
-# Botón descargar
-st.download_button("Descargar CSV", df.to_csv(index=False), "ranking_viabilidad.csv", "text/csv")
+st.download_button(
+    "Descargar CSV",
+    df.to_csv(index=False),
+    "ranking_viabilidad.csv",
+    "text/csv"
+)
 
-# -------- Detalle por candidato --------
 st.markdown("---")
-st.subheader("Detalle del análisis")
+st.subheader("Detalle del análisis y conclusiones")
 
-with st.expander("Rodrigo Paz Pereira – PDC"):
-    st.markdown("""
-**Fiscal:** Redistribución 50/50 con regla de déficit cero y congelar empresas públicas deficitarias.  
-**Institucionalidad/Justicia:** Profesionalización estatal y reforma judicial meritocrática.  
-**Productores/Comercio:** Liberalizar exportaciones y reordenar impuestos (nuevo orden tributario).  
-**Riesgos:** Alto costo político para reconfigurar coparticipación; necesita gran consenso.
-""")
+for cand in df["Candidato"]:
+    with st.expander(cand):
+        # texto corto de la tabla
+        resumen = df[df["Candidato"] == cand]["Lectura rápida"].iloc[0]
+        st.markdown(f"**Lectura rápida:** {resumen}")
+        # conclusión elaborada
+        st.markdown(f"**Conclusión (analista económico):** {conclusiones[cand]}")
 
-with st.expander("Manfred Reyes Villa – APB Súmate"):
-    st.markdown("""
-**Fiscal:** Reducir ministerios de 17 a 14 (ahorro inmediato) y recortar propaganda.  
-**Subsidios:** Eliminar subvención a combustibles tras transparentar costos.  
-**Empresas públicas:** Privatización selectiva / cierre de deficitarias.  
-**Riesgos:** Conflicto social por quitar subsidios y privatizaciones.
-""")
-
-with st.expander("Samuel Doria Medina – Alianza Unidad"):
-    st.markdown("""
-**100 días / ajuste macro:** Ajuste fiscal, controlar inflación y flexibilizar tipo de cambio (“devolver dólares”).  
-**EP deficitarias:** Cierre / reestructuración con apoyo multilaterales (≈USD 3.500 MM).  
-**Emprendimiento:** Meta 1 millón de emprendimientos + agencia nacional.  
-**Energía/Transición:** 45% renovables 2030 y “Ley de Prosumidores”.  
-**Riesgos:** Dependencia de financiamiento externo y tiempos cortos para estabilizar expectativas.
-""")
-
-with st.expander("Carlos Eduardo del Castillo – MAS‑IPSP"):
-    st.markdown("""
-**Social:** Mantener/incrementar subsidios y programas (bonos, SUS).  
-**Empleo:** Programas específicos sin reforma estructural laboral.  
-**Innovación:** Becas e innovación MIPYMES, sin metas fiscales claras.  
-**Riesgos:** No aborda déficit/subsidios de base; continuidad con RIN bajas presiona sostenibilidad.
-""")
-
-st.caption("Escala: 0–5 por criterio. Total 0–30 (más alto = más viable). Evaluación cualitativa experta.")
+st.caption("Criterios (0–5): Sostenibilidad fiscal, Crecimiento & empleo, Institucionalidad/anticorrupción, Clima para productores, Justicia/seguridad jurídica, Claridad & ejecutabilidad. Total máx. 30.")
